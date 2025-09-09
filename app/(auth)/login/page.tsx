@@ -58,8 +58,8 @@ export default function LoginPage() {
         <p className="text-sm text-foreground/70">Acesse sua conta</p>
         <Spacer y={4} />
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-          <Input className="bg-white" label="E-mail" type="email" {...register("email")} isInvalid={!!errors.email} errorMessage={errors.email?.message} />
-          <Input className="bg-white" label="Senha" type="password" {...register("password")} isInvalid={!!errors.password} errorMessage={errors.password?.message} />
+          <Input label="E-mail" type="email" {...register("email")} isInvalid={!!errors.email} errorMessage={errors.email?.message} />
+          <Input label="Senha" type="password" {...register("password")} isInvalid={!!errors.password} errorMessage={errors.password?.message} />
           <Button color="primary" type="submit" isLoading={loading} className="w-full">Entrar</Button>
         </form>
         <Spacer y={4} />
