@@ -19,8 +19,19 @@ export type LoginInput = {
   password: string;
 };
 
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  status: string;
+  emailStatus: string;
+  platformRole: string;
+  avatar: string;
+};
+
 type AuthState = {
   token: string | null;
+  user: User | null;
   loading: boolean;
   error: string | null;
   register: (input: RegisterInput) => Promise<void>;
@@ -32,6 +43,7 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
       token: null,
+      user: null,
       loading: false,
       error: null,
       async register(input) {
@@ -48,6 +60,11 @@ export const useAuthStore = create<AuthState>()(
             
           if (token) {
             set({ token, loading: false });
+
+            const user = response.data?.user;
+            if (user) {
+              set({ user });
+            }
           } else {
             set({ loading: false });
           }
@@ -76,6 +93,12 @@ export const useAuthStore = create<AuthState>()(
           }
         
           set({ token, loading: false });
+          
+          const user = response.data?.user;
+          if (user) {
+            console.log("User data from login:", user);
+            set({ user });
+          }
         } catch (e: unknown) {
           console.error("Login error:", e);
           const message = (e as any)?.response?.data?.message || (e as Error).message || "Erro ao logar";
@@ -84,12 +107,16 @@ export const useAuthStore = create<AuthState>()(
         }
       },
       logout() {
-        set({ token: null });
+        set({ token: null, user: null, error: null });
+        // Clear localStorage
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("auth");
+        }
       },
     }),
     {
       name: "auth",
-      partialize: (state) => ({ token: state.token }),
+      partialize: (state) => ({ token: state.token, user: state.user }),
     }
   )
 );

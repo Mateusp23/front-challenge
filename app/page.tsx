@@ -1,17 +1,48 @@
 "use client";
 
-import { Button } from "@heroui/react";
-import { ThemeSwitcher } from "./components/ThemeSwitcher";
-import { useRouter } from "next/navigation";
+import { Spinner } from "@heroui/react";
+import { Header } from "../components/Header";
+import { useAuth } from "../hooks/useAuth";
+import { useAuthGuard } from "../hooks/useAuthGuard";
 
 export default function Page() {
-  const router = useRouter();
-  return (
-    <div className="min-h-screen bg-[#098989] p-4">
-      <div className="flex items-center gap-4">
-        <Button onClick={() => router.push("/login")}>Login</Button>
-        <ThemeSwitcher />
+  const { user } = useAuth();
+  const { isLoading, shouldRender } = useAuthGuard();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Spinner />
       </div>
-    </div>
+    );
+  }
+
+  if (!shouldRender) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">Redirecionando...</div>
+        <Spinner />
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <Header />
+      <div className="min-h-screen p-8">
+        <div className="max-w-5xl mx-auto text-center space-y-8">
+          {user && (
+            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800 p-6">
+              <h2 className="text-2xl font-semibold text-blue-800 dark:text-blue-200 mb-2">
+                Bem-vindo, {user.name}! 👋
+              </h2>
+              <p className="text-blue-600 dark:text-blue-300">
+                Sua melhor plataforma de gestão de produtos.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </>
   );
 }
