@@ -1,8 +1,17 @@
+"use client";
 
-export default function Home() {
+import { Button } from "@heroui/react";
+import { ThemeSwitcher } from "./components/ThemeSwitcher";
+import { useRouter } from "next/navigation";
+
+export default function Page() {
+  const router = useRouter();
   return (
-    <div className="items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <h1>Hello World</h1>
+    <div className="min-h-screen bg-[#098989] p-4">
+      <div className="flex items-center gap-4">
+        <Button onClick={() => router.push("/login")}>Login</Button>
+        <ThemeSwitcher />
+      </div>
     </div>
   );
 }

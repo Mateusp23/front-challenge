@@ -1,22 +1,30 @@
 @import "tailwindcss";
+/* Usa o plugin que você exportou em hero.ts (que fica na raiz do projeto) */
+@plugin "./hero.ts";
+
+/* Garanta que o Tailwind escaneie seus arquivos e os do HeroUI */
+@source "../app/**/*.{ts,tsx,js,jsx}";
+@source "../components/**/*.{ts,tsx,js,jsx}";
+@source "../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}";
+
+/* Dark mode via classe */
+@custom-variant dark (&:is(.dark *));
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
-@theme inline {
+html.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-poppins: var(--font-poppins);
   --font-inter: var(--font-inter);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
