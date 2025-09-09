@@ -4,7 +4,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAuthStore } from "../../../stores/auth";
+import { useAuth } from "../../../hooks/useAuth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Input, Button, Card, Spacer } from "@heroui/react";
@@ -44,8 +44,7 @@ function extractErrorMessage(err: unknown): string {
 
 export default function RegisterPage() {
   const router = useRouter();
-  const registerAction = useAuthStore((s) => s.register);
-  const loading = useAuthStore((s) => s.loading);
+  const { register: registerAction, isLoading, isAuthenticated } = useAuth();
 
   const {
     register,
@@ -59,7 +58,12 @@ export default function RegisterPage() {
     try {
       await registerAction(values);
       toast.success("Cadastro realizado com sucesso!");
-      router.push("/login");
+      // If register returns token, go to home; otherwise go to login
+      if (isAuthenticated) {
+        router.push("/");
+      } else {
+        router.push("/login");
+      }
     } catch (err: unknown) {
       toast.error(extractErrorMessage(err));
     }
@@ -81,7 +85,7 @@ export default function RegisterPage() {
             <Input label="DDD" placeholder="11" {...register("phone.ddd")} />
             <Input label="Número" placeholder="912345678" {...register("phone.number")} />
           </div>
-          <Button color="primary" type="submit" isLoading={loading} className="w-full">Cadastrar</Button>
+          <Button color="primary" type="submit" isLoading={isLoading} className="w-full">Cadastrar</Button>
         </form>
         <Spacer y={4} />
         <p className="text-sm">

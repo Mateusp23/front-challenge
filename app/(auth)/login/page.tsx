@@ -4,12 +4,10 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAuthStore } from "../../../stores/auth";
+import { useAuth } from "../../../hooks/useAuth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Input, Button, Card, Spacer } from "@heroui/react";
-
-
 import { toast } from "sonner";
 
 const loginSchema = z.object({
@@ -30,8 +28,7 @@ function extractErrorMessage(err: unknown): string {
 
 export default function LoginPage() {
   const router = useRouter();
-  const loginAction = useAuthStore((s) => s.login);
-  const loading = useAuthStore((s) => s.loading);
+  const { login: loginAction, isLoading, isAuthenticated } = useAuth();
 
   const {
     register,
@@ -60,7 +57,7 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
           <Input label="E-mail" type="email" {...register("email")} isInvalid={!!errors.email} errorMessage={errors.email?.message} />
           <Input label="Senha" type="password" {...register("password")} isInvalid={!!errors.password} errorMessage={errors.password?.message} />
-          <Button color="primary" type="submit" isLoading={loading} className="w-full">Entrar</Button>
+          <Button color="primary" type="submit" isLoading={isLoading} className="w-full">Entrar</Button>
         </form>
         <Spacer y={4} />
         <p className="text-sm">

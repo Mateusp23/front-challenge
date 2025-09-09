@@ -30,16 +30,29 @@ type AuthState = {
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       token: null,
       loading: false,
       error: null,
       async register(input) {
         set({ loading: true, error: null });
         try {
-          await api.post(endpoints.register, input);
-          set({ loading: false });
+          const response = await api.post(endpoints.register, input);
+
+          const token: string | undefined = 
+            response.data?.token || 
+            response.data?.accessToken || 
+            response.data?.access_token ||
+            response.data?.authToken ||
+            response.data?.jwt;
+            
+          if (token) {
+            set({ token, loading: false });
+          } else {
+            set({ loading: false });
+          }
         } catch (e: unknown) {
+          console.error("Register error:", e);
           const message = (e as any)?.response?.data?.message || (e as Error).message || "Erro ao cadastrar";
           set({ error: message, loading: false });
           throw e;
@@ -48,11 +61,23 @@ export const useAuthStore = create<AuthState>()(
       async login(input) {
         set({ loading: true, error: null });
         try {
-          const { data } = await api.post(endpoints.login, input);
-          const token: string | undefined = data?.token;
-          if (!token) throw new Error("Token não retornado pela API.");
+          const response = await api.post(endpoints.login, input);
+          
+          const token: string | undefined = 
+            response.data?.token || 
+            response.data?.accessToken || 
+            response.data?.access_token ||
+            response.data?.authToken ||
+            response.data?.jwt;
+            
+          if (!token) {
+            console.error("Token not found in response:", response.data);
+            throw new Error("Token não retornado pela API.");
+          }
+        
           set({ token, loading: false });
         } catch (e: unknown) {
+          console.error("Login error:", e);
           const message = (e as any)?.response?.data?.message || (e as Error).message || "Erro ao logar";
           set({ error: message, loading: false });
           throw e;
@@ -63,10 +88,12 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: "auth", // localStorage key
+      name: "auth",
       partialize: (state) => ({ token: state.token }),
-      skipHydration: true,
-      storage: typeof window !== "undefined" ? undefined : undefined,
     }
   )
 );
+
+if (typeof window !== "undefined") {
+  useAuthStore.persist.rehydrate();
+}
