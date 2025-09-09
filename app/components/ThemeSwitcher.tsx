@@ -1,25 +1,31 @@
-// app/components/ThemeSwitcher.tsx
 "use client";
 
-import { Button } from "@heroui/react";
-import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { useTheme } from "next-themes";
+import { Button, Tooltip } from "@heroui/react";
+import { Moon, Sun } from "lucide-react";
 
 export function ThemeSwitcher() {
-  const [mounted, setMounted] = useState(false)
-  const { theme, setTheme } = useTheme()
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
 
-  if (!mounted) return null
+  const isDark = resolvedTheme === "dark";
 
   return (
-    <div>
-      The current theme is: {theme}
-      <Button onClick={() => setTheme('light')}>Light Mode</Button>
-      <Button onClick={() => setTheme('dark')}>Dark Mode</Button>
-    </div>
-  )
-};
+    <Tooltip content={isDark ? "Modo claro" : "Modo escuro"} placement="bottom">
+      <Button
+        isIconOnly
+        radius="full"
+        variant="light"
+        aria-label={isDark ? "Ativar modo claro" : "Ativar modo escuro"}
+        onClick={() => setTheme(isDark ? "light" : "dark")}
+        className="transition-transform duration-300 hover:rotate-12"
+      >
+        {isDark ? <Sun size={18} /> : <Moon size={18} />}
+      </Button>
+    </Tooltip>
+  );
+}
