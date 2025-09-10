@@ -49,17 +49,19 @@ export function ProductEditModal({ isOpen, onClose, product }: ProductEditModalP
     resolver: zodResolver(updateProductSchema),
   });
 
-  // Preencher formulário quando produto mudar
+  // Preencher formulário quando produto mudar (reset garante preenchimento dos campos registrados)
   useEffect(() => {
     if (product) {
-      setValue('title', product.title);
-      setValue('description', product.description);
-      setValue('status', product.status);
+      reset({
+        title: product.title,
+        description: product.description,
+        status: product.status,
+      });
       setThumbnailPreview(product.thumbnail || '');
       setNewThumbnail(null);
       setShowThumbnailSection(false);
     }
-  }, [product, setValue]);
+  }, [product, reset]);
 
   // Função para lidar com upload de arquivo
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
