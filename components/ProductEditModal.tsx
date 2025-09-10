@@ -31,7 +31,7 @@ interface ProductEditModalProps {
 }
 
 export function ProductEditModal({ isOpen, onClose, product }: ProductEditModalProps) {
-  const { update, updateThumbnail, loading } = useProducts();
+  const { update, updateThumbnail, loading, refresh } = useProducts();
   const [thumbnailPreview, setThumbnailPreview] = useState<string>('');
   const [thumbnailType, setThumbnailType] = useState<'file' | 'url'>('file');
   const [newThumbnail, setNewThumbnail] = useState<File | string | null>(null);
@@ -138,6 +138,12 @@ export function ProductEditModal({ isOpen, onClose, product }: ProductEditModalP
 
       toast.success('Produto atualizado com sucesso!');
       handleClose();
+      
+      // Força refresh da lista após um pequeno delay para garantir que a UI seja atualizada
+      setTimeout(() => {
+        refresh();
+      }, 100);
+      
     } catch {
       toast.error('Erro inesperado ao atualizar produto');
     }

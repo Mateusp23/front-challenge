@@ -5,8 +5,11 @@ import { Input } from "@heroui/react";
 import { UseFormSetValue, UseFormWatch, FieldErrors } from "react-hook-form";
 
 interface PhoneInputProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setValue: UseFormSetValue<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   watch: UseFormWatch<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   errors?: FieldErrors<any>;
   countryName?: string;
   dddName?: string;
