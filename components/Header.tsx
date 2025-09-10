@@ -9,7 +9,7 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
-  Link as HeroLink,
+  Link,
   Tooltip,
   Button,
   Modal,
@@ -19,13 +19,12 @@ import {
   ModalFooter,
   useDisclosure,
 } from "@heroui/react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { useAuth } from "../hooks/useAuth";
 import { LogOut } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { LoadingRedirect } from "./LoadingRedirect";
 
 const NAV = [
   { href: "/", label: "Home" },
@@ -34,14 +33,23 @@ const NAV = [
 ];
 
 export function Header() {
-  const { isAuthenticated, isLoading, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter();
+  const [isLoggingOut, setIsLoggingOut] = React.useState(false);
 
   const isActive = (href: string) =>
     pathname === href || pathname?.startsWith(`${href}/`);
+
+  const handleLogout = () => {
+    setIsLoggingOut(true);
+    logout();
+    setIsLoggingOut(false);
+    toast.success("Sessão encerrada");
+    setIsMenuOpen(false);
+    onClose();
+  };
 
   return (
     <>
@@ -65,12 +73,11 @@ export function Header() {
           {isAuthenticated &&
             NAV.map((item) => (
               <NavbarItem key={item.href} isActive={isActive(item.href)}>
-                <Link href={item.href} className="text-foreground hover:opacity-90">
-                  <HeroLink
-                    className={isActive(item.href) ? "font-semibold" : "text-foreground/80"}
-                  >
-                    {item.label}
-                  </HeroLink>
+                <Link
+                  href={item.href}
+                  className={isActive(item.href) ? "font-semibold" : "text-foreground/80"}
+                >
+                  {item.label}
                 </Link>
               </NavbarItem>
             ))}
@@ -160,24 +167,14 @@ export function Header() {
               color="danger"
               startContent={<LogOut size={16} />}
               aria-label="Confirmar saída"
-              onPress={async () => {
-                try {
-                  // Chama API de logout (ignora erros)
-                  await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
-                } finally {
-                  logout();
-                  toast.success("Sessão encerrada");
-                  setIsMenuOpen(false);
-                  onClose();
-                  router.replace("/login");
-                }
-              }}
+              onPress={ handleLogout }
             >
               Sair
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <LoadingRedirect open={isLoggingOut} />
     </>
   );
 }
