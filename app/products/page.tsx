@@ -43,6 +43,7 @@ import { useProducts } from "../../hooks/useProducts";
 import { Product } from "../../types/product";
 import { ProductCreateModal } from "../../components/ProductCreateModal";
 import { ProductEditModal } from "../../components/ProductEditModal";
+import { Footer } from "@/components/Footer";
 
 export default function ProductsPage() {
   const { isLoading: authLoading, shouldRender } = useAuthGuard();
@@ -172,7 +173,7 @@ export default function ProductsPage() {
     <>
       <Header />
       
-      <div className="min-h-screen p-6">
+      <div className="p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Cabeçalho */}
           <div className="flex justify-between items-center">
@@ -431,6 +432,7 @@ export default function ProductsPage() {
         onClose={onEditClose}
         product={selectedProduct}
       />
+      <Footer />
     </>
   );
 }

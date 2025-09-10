@@ -20,6 +20,7 @@ import {
   CheckCircle2,
   BarChart3,
 } from "lucide-react";
+import { Footer } from "@/components/Footer";
 
 export default function Page() {
   const { user } = useAuth();
@@ -30,8 +31,8 @@ export default function Page() {
   return (
     <>
       <Header />
-      <main className="min-h-screen p-6 sm:p-8">
-        <div className="max-w-5xl mx-auto space-y-8">
+      <main className="p-6 sm:p-8">
+        <div className="max-w-7xl mx-auto space-y-8">
           {/* Boas-vindas */}
           {user && (
             <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800 p-6">
@@ -169,6 +170,7 @@ export default function Page() {
           </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

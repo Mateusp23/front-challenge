@@ -21,6 +21,7 @@ import { useProductMetrics } from "../../hooks/useProductMetrics";
 import { useAuthGuard } from "../../hooks/useAuthGuard";
 import { Spinner } from "@heroui/react";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 export default function MetricsPage() {
   const { isLoading: authLoading, shouldRender } = useAuthGuard();
@@ -41,7 +42,7 @@ export default function MetricsPage() {
   return (
     <>
       <Header />
-      <div className="min-h-screen p-6">
+      <div className="p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           <div>
             <h1 className="text-3xl font-bold">Métricas</h1>
@@ -113,6 +114,7 @@ export default function MetricsPage() {
           </Card>
         </div>
       </div>
+      <Footer />
     </>
   );
 }
