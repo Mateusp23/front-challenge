@@ -44,14 +44,14 @@ export function Footer() {
 
           {/* Links */}
           <nav className="flex justify-start sm:justify-center gap-4 text-sm">
+            <Link href="/" className="text-foreground/80 hover:text-foreground">
+              Home
+            </Link>
             <Link href="/products" className="text-foreground/80 hover:text-foreground">
               Produtos
             </Link>
             <Link href="/metrics" className="text-foreground/80 hover:text-foreground">
               Métricas
-            </Link>
-            <Link href="/" className="text-foreground/80 hover:text-foreground">
-              Início
             </Link>
           </nav>
 
