@@ -49,7 +49,7 @@ export function Header() {
         isBordered
         onMenuOpenChange={setIsMenuOpen}
         classNames={{
-          wrapper: "w-full max-w-7xl mx-auto px-0",
+          wrapper: "w-full max-w-7xl mx-auto px-4 md:px-0",
         }}
         className="bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60"
       >
