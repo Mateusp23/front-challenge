@@ -63,7 +63,7 @@ export function Footer() {
               Icon={Github}
             />
             <IconLink
-              href="https://docs.google.com/document/d/1wAS4hNg7GyyoF7xLhFAOSoL237jivyY8/edit?tab=t.0"
+              href="https://www.linkedin.com/in/mateusp23/"
               label="Linkedin do Desenvolvedor"
               Icon={Linkedin}
             />
