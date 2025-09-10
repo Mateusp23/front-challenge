@@ -60,7 +60,6 @@ export default function ProductsPage() {
     currentPage,
   } = useProducts();
 
-  // Estados locais
   const [searchTerm, setSearchTerm] = useState(filters.filter || '');
   const [sortConfig, setSortConfig] = useState<{
     key: keyof Product;
