@@ -9,12 +9,23 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Input, Button, Card, Spacer } from "@heroui/react";
 import { toast } from "sonner";
+import { PhoneInput } from "../../../components/PhoneInput";
 
 const phoneSchema = z
   .object({
     country: z.string().optional(),
-    ddd: z.string().optional(),
-    number: z.string().optional(),
+    ddd: z
+      .string()
+      .optional()
+      .refine((val) => !val || /^\d{2}$/.test(val), {
+        message: "DDD deve conter exatamente 2 dígitos",
+      }),
+    number: z
+      .string()
+      .optional()
+      .refine((val) => !val || /^\d{8,9}$/.test(val), {
+        message: "Número deve conter 8 ou 9 dígitos (sem DDD)",
+      }),
   })
   .partial();
 
@@ -50,9 +61,12 @@ export default function RegisterPage() {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    watch,
   } = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
   });
+
 
   const onSubmit = async (values: RegisterForm) => {
     try {
@@ -80,11 +94,11 @@ export default function RegisterPage() {
           <Input label="E-mail" type="email" {...register("email")} isInvalid={!!errors.email} errorMessage={errors.email?.message} />
           <Input label="Senha" type="password" {...register("password")} isInvalid={!!errors.password} errorMessage={errors.password?.message} />
           <Input label="Confirmar senha" type="password" {...register("verifyPassword")} isInvalid={!!errors.verifyPassword} errorMessage={errors.verifyPassword?.message} />
-          <div className="grid grid-cols-3 gap-2">
-            <Input label="País" placeholder="55" {...register("phone.country")} />
-            <Input label="DDD" placeholder="11" {...register("phone.ddd")} />
-            <Input label="Número" placeholder="912345678" {...register("phone.number")} />
-          </div>
+          <PhoneInput 
+            setValue={setValue}
+            watch={watch}
+            errors={errors}
+          />
           <Button color="primary" type="submit" isLoading={isLoading} className="w-full">Cadastrar</Button>
         </form>
         <Spacer y={4} />
