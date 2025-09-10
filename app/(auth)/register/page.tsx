@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Input, Button, Card, Spacer } from "@heroui/react";
 import { toast } from "sonner";
 import { PhoneInput } from "../../../components/PhoneInput";
+import InputPassword from "@/components/InputPassword";
 
 const phoneSchema = z
   .object({
@@ -92,8 +93,8 @@ export default function RegisterPage() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
           <Input label="Nome" {...register("name") } isInvalid={!!errors.name} errorMessage={errors.name?.message} />
           <Input label="E-mail" type="email" {...register("email")} isInvalid={!!errors.email} errorMessage={errors.email?.message} />
-          <Input label="Senha" type="password" {...register("password")} isInvalid={!!errors.password} errorMessage={errors.password?.message} />
-          <Input label="Confirmar senha" type="password" {...register("verifyPassword")} isInvalid={!!errors.verifyPassword} errorMessage={errors.verifyPassword?.message} />
+          <InputPassword label="Senha" {...register("password")} isInvalid={!!errors.password} errorMessage={errors.password?.message} />
+          <InputPassword label="Confirmar senha" {...register("verifyPassword")} isInvalid={!!errors.verifyPassword} errorMessage={errors.verifyPassword?.message} />
           <PhoneInput 
             setValue={setValue}
             watch={watch}
