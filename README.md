@@ -190,5 +190,5 @@ Extras:
 ---
 
 ## 📄 Licença
-Uso educacional/demonstrativo. Ajuste conforme necessário para seu contexto.
+Uso educacional/demonstrativo.
 
