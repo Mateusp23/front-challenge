@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 const NAV = [
+  { href: "/", label: "Home" },
   { href: "/products", label: "Produtos" },
   { href: "/metrics", label: "Métricas" },
 ];
