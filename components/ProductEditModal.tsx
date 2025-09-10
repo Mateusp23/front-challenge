@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   Modal,
   ModalContent,
@@ -36,6 +36,8 @@ export function ProductEditModal({ isOpen, onClose, product }: ProductEditModalP
   const [thumbnailType, setThumbnailType] = useState<'file' | 'url'>('file');
   const [newThumbnail, setNewThumbnail] = useState<File | string | null>(null);
   const [showThumbnailSection, setShowThumbnailSection] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const {
     register,
@@ -84,6 +86,27 @@ export function ProductEditModal({ isOpen, onClose, product }: ProductEditModalP
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const openFileDialog = () => fileInputRef.current?.click();
+
+  const handleDrop: React.DragEventHandler<HTMLDivElement> = (event) => {
+    event.preventDefault();
+    setIsDragging(false);
+    const file = event.dataTransfer.files?.[0];
+    if (file) {
+      const synthetic = { target: { files: [file] } } as unknown as React.ChangeEvent<HTMLInputElement>;
+      handleFileUpload(synthetic);
+    }
+  };
+
+  const handleDragOver: React.DragEventHandler<HTMLDivElement> = (event) => {
+    event.preventDefault();
+    if (!isDragging) setIsDragging(true);
+  };
+
+  const handleDragLeave: React.DragEventHandler<HTMLDivElement> = () => {
+    setIsDragging(false);
   };
 
   // Função para lidar com URL
@@ -167,6 +190,13 @@ export function ProductEditModal({ isOpen, onClose, product }: ProductEditModalP
       onClose={handleClose}
       size="2xl"
       scrollBehavior="inside"
+      classNames={{
+        wrapper: "items-center sm:items-center",
+        base: "w-full sm:max-w-2xl mx-2 max-h-[90vh] flex flex-col overflow-hidden rounded-t-2xl sm:rounded-2xl",
+        body: "sm:p-6 p-4 overflow-auto",
+        header: "sm:p-6 p-4",
+        footer: "sm:p-6 p-4",
+      }}
     >
       <ModalContent>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -291,21 +321,27 @@ export function ProductEditModal({ isOpen, onClose, product }: ProductEditModalP
                     {/* Input baseado no tipo */}
                     {thumbnailType === 'file' ? (
                       <div className="space-y-2">
+                        <div
+                          onClick={openFileDialog}
+                          onDrop={handleDrop}
+                          onDragOver={handleDragOver}
+                          onDragLeave={handleDragLeave}
+                          className={`flex flex-col items-center justify-center border-2 border-dashed rounded-xl cursor-pointer transition-colors h-32 sm:h-40 ${
+                            isDragging ? 'border-primary bg-primary-50/30 dark:bg-primary-900/20' : 'border-default-300 dark:border-default-600'
+                          }`}
+                        >
+                          <p className="text-sm text-foreground/80">
+                            Arraste e solte a imagem aqui ou <span className="text-primary font-medium">clique para enviar</span>
+                          </p>
+                          <p className="text-xs text-foreground/60 mt-1">JPG, PNG, GIF • até 5MB</p>
+                        </div>
                         <input
+                          ref={fileInputRef}
                           type="file"
                           accept="image/*"
                           onChange={handleFileUpload}
-                          className="block w-full text-sm text-gray-500
-                            file:mr-4 file:py-2 file:px-4
-                            file:rounded-full file:border-0
-                            file:text-sm file:font-semibold
-                            file:bg-primary-50 file:text-primary-700
-                            hover:file:bg-primary-100
-                            dark:file:bg-primary-900 dark:file:text-primary-300"
+                          className="hidden"
                         />
-                        <p className="text-xs text-gray-500">
-                          Formatos aceitos: JPG, PNG, GIF. Máximo 5MB.
-                        </p>
                       </div>
                     ) : (
                       <Input
