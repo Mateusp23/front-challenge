@@ -36,6 +36,7 @@ import {
   RefreshCw
 } from "lucide-react";
 import { toast } from "sonner";
+import { TruncatedText } from "../../components/TruncatedText";
 import { Header } from "../../components/Header";
 import { useAuthGuard } from "../../hooks/useAuthGuard";
 import { useProducts } from "../../hooks/useProducts";
@@ -316,9 +317,7 @@ export default function ProductsPage() {
                             <div className="font-medium">{product.title}</div>
                           </TableCell>
                           <TableCell>
-                            <div className="max-w-xs truncate">
-                              {product.description}
-                            </div>
+                            <TruncatedText text={product.description} className="max-w-xs" />
                           </TableCell>
                           <TableCell>
                             <Chip
