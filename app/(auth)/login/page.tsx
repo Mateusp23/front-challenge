@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Input, Button, Card, Spacer } from "@heroui/react";
 import { toast } from "sonner";
+import InputPassword from "@/components/InputPassword";
 
 const loginSchema = z.object({
   email: z.string().email("E-mail inválido"),
@@ -56,7 +57,7 @@ export default function LoginPage() {
         <Spacer y={4} />
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
           <Input label="E-mail" type="email" {...register("email")} isInvalid={!!errors.email} errorMessage={errors.email?.message} />
-          <Input label="Senha" type="password" {...register("password")} isInvalid={!!errors.password} errorMessage={errors.password?.message} />
+          <InputPassword label="Senha" {...register("password")} isInvalid={!!errors.password} errorMessage={errors.password?.message}  />
           <Button color="primary" type="submit" isLoading={isLoading} className="w-full">Entrar</Button>
         </form>
         <Spacer y={4} />
