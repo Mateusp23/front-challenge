@@ -28,7 +28,7 @@ function extractErrorMessage(err: unknown): string {
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login: loginAction, isLoading, isAuthenticated } = useAuth();
+  const { login: loginAction, isLoading } = useAuth();
 
   const {
     register,

@@ -12,7 +12,7 @@ interface LogoutButtonProps {
   className?: string;
 }
 
-export function LogoutButton({ variant = "light", size = "md", className }: LogoutButtonProps) {
+export function LogoutButton({ variant = "light", size = "md" }: LogoutButtonProps) {
   const { logout, isAuthenticated } = useAuth();
   const router = useRouter();
 
@@ -21,7 +21,7 @@ export function LogoutButton({ variant = "light", size = "md", className }: Logo
       logout();
       toast.success("Logout realizado com sucesso!");
       router.push("/login");
-    } catch (error) {
+    } catch {
       toast.error("Erro ao fazer logout");
     }
   };

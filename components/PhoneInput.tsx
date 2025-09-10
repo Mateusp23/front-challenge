@@ -47,6 +47,7 @@ export function PhoneInput({
   // Helper para acessar erros aninhados
   const getNestedError = (path: string) => {
     const keys = path.split('.');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let current: any = errors;
     for (const key of keys) {
       if (current?.[key]) {

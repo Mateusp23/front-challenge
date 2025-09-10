@@ -38,4 +38,7 @@ api.interceptors.request.use((config) => {
 export const endpoints = {
   register: process.env.NEXT_PUBLIC_AUTH_REGISTER_PATH || "/users",
   login: process.env.NEXT_PUBLIC_AUTH_LOGIN_PATH || "/auth/login",
+  products: "/products",
+  productById: (id: string) => `/products/${id}`,
+  productThumbnail: (id: string) => `/products/thumbnail/${id}`,
 };
